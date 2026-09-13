@@ -22,27 +22,28 @@ assets/images/          → your logo/label, product photo, and generated favico
 
 > If your GoDaddy plan is the drag-and-drop **Website Builder** (not cPanel hosting), it can't accept custom HTML files directly — you'd need to either switch to a cPanel/"Web Hosting" plan, or embed sections of this using an HTML embed block. Let me know which plan you have if you're unsure, and I can adjust the approach.
 
-## 2. Connect the enquiry form (2 minutes)
+## 2. The enquiry form sends straight to WhatsApp
 
-The "Become a Partner" form on the site needs somewhere to send its submissions, since a plain static site has no backend. The easiest free option:
+No backend, no third-party form service needed. When someone fills in the "Become a Partner" form and taps **Send via WhatsApp**, it opens WhatsApp (app on mobile, WhatsApp Web on desktop) with all their details already typed into a message addressed to your business number — they just tap Send in WhatsApp to complete it.
 
-1. Go to [formspree.io](https://formspree.io) and sign up free.
-2. Create a new form, and copy the endpoint it gives you (looks like `https://formspree.io/f/abcd1234`).
-3. Open `index.html`, find this line (search for `YOUR_FORM_ID`):
-   ```html
-   <form id="enquiryForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-   ```
-4. Replace `YOUR_FORM_ID` with your real form ID and re-upload `index.html`.
+This is already wired to the site's real number:
+```html
+<form id="enquiryForm" data-whatsapp-number="919454809300">
+```
+If that number ever changes, update it here and in the floating WhatsApp button near the bottom of `index.html` (`href="https://wa.me/919454809300"`), then re-upload.
 
-Submissions will then land directly in your email inbox. (Web3Forms is a similar free alternative if you prefer.)
+**Good to know:**
+- This only works if the *visitor's* device can open WhatsApp (app installed, or WhatsApp Web logged in on desktop) — true for the vast majority of Indian mobile users.
+- Every submission requires the visitor to tap Send once inside WhatsApp — nothing is sent silently in the background; that's a WhatsApp/browser restriction, not something a static site can route around.
+- Want an email backup too? A free form service like [Formspree](https://formspree.io) or [Web3Forms](https://web3forms.com) can be added alongside this.
 
 ## 3. Things to personalize before launch
 
 Search `index.html` for these and update with your real details:
 
-- **Phone number** — currently `+91 90000 00000` (appears in the footer and the WhatsApp button `wa.me/919000000000`)
-- **Email** — currently `hello@jaikisanoil.in`
-- **Address / city** — currently "Dadri, Uttar Pradesh, India"
+- **Phone number** — footer and WhatsApp button are already set to `+91-94548 09300`; update in both places if this ever changes
+- **Email** — check the footer's current address matches your live inbox
+- **Address / city** — check the footer's current address is correct
 - **FSSAI license number** — currently a placeholder in the footer; this is mandatory for any packaged food product sold in India
 - **Prices** — ₹185 (1L) and ₹99 (500ml) are placeholders; set your real MRP
 - **Social links** — the Facebook/Instagram icons in the footer currently link to `#`; paste your real profile URLs

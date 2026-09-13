@@ -152,7 +152,7 @@ button{ font-family: inherit; cursor: pointer; }
   align-items:center;
   gap:12px;
 }
-.brand img{ height: 46px; width:46px; object-fit:contain; border-radius:50%; }
+.brand img{ height: 65px; width:65px;  border-radius:50%; }
 .brand-text{
   font-family: var(--font-display);
   font-weight: 700;

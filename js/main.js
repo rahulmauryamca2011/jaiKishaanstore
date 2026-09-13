@@ -28,25 +28,49 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Enquiry form — friendly success message
-  // NOTE: replace the form's "action" URL in index.html with your own
-  // Formspree / Web3Forms endpoint for this to actually deliver emails.
+  // Enquiry form — sends the enquiry straight to WhatsApp.
+  // No backend needed: this builds a pre-filled message and opens
+  // wa.me addressed to the business number set in data-whatsapp-number
+  // on the <form> tag in index.html. The visitor just taps "Send" in
+  // WhatsApp to complete it.
   var form = document.getElementById('enquiryForm');
   var successMsg = document.getElementById('formSuccess');
 
   if (form) {
     form.addEventListener('submit', function (e) {
-      var action = form.getAttribute('action') || '';
-      // If the placeholder endpoint hasn't been replaced yet, don't attempt
-      // a real network submission — just show guidance instead.
-      if (action.indexOf('YOUR_FORM_ID') !== -1) {
-        e.preventDefault();
-        alert('Almost there! Connect this form to Formspree (or Web3Forms) by replacing YOUR_FORM_ID in index.html — see README.md for the 2-minute setup.');
+      e.preventDefault();
+
+      var waNumber = form.getAttribute('data-whatsapp-number') || '';
+
+      var name = (form.querySelector('#name') || {}).value || '';
+      var phone = (form.querySelector('#phone') || {}).value || '';
+      var city = (form.querySelector('#city') || {}).value || '';
+      var type = (form.querySelector('#type') || {}).value || '';
+      var message = (form.querySelector('#message') || {}).value || '';
+
+      if (!name || !phone || !city) {
+        // Let the browser's native required-field validation handle this.
+        form.reportValidity();
         return;
       }
-      // Otherwise let it submit normally to the configured endpoint,
-      // and show a friendly confirmation.
+
+      var lines = [
+        'New enquiry from the Jai Kishaan website:',
+        '',
+        'Name: ' + name,
+        'Phone: ' + phone,
+        'City/Town: ' + city,
+        'Enquiry type: ' + type
+      ];
+      if (message) {
+        lines.push('Message: ' + message);
+      }
+
+      var text = encodeURIComponent(lines.join('\n'));
+      var waUrl = 'https://wa.me/' + waNumber + '?text=' + text;
+
       successMsg.classList.add('visible');
+      window.open(waUrl, '_blank', 'noopener');
     });
   }
 });
